@@ -4,11 +4,11 @@ import { WebSocketServer } from 'ws';
 import { rgbToHex, wrapDataForWs } from './src/utils.js';
 import PixelGrid from './src/PixelGrid.js';
 
-const server = express();
-server.use(express.static('public'));
+const app = express();
+app.use(express.static('../client'));
 
 // HTTP server to upgrade non-secure requests to https
-const httpServer = http.createServer(server);
+const httpServer = http.createServer(app);
 httpServer.listen(3001, () => console.log("Listening on 3001"));
 
 
