@@ -1,0 +1,39 @@
+{
+  "env": {
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint", "jsx-a11y"],
+  "rules": {
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.test.tsx"],
+      "rules": {
+        // Helpful to be able to pass empty functions as props to components when not needing to specifically test them
+        "@typescript-eslint/no-empty-function": "off"
+      }
+    }
+  ],
+  "globals": {
+    "module": "readonly",
+    "require": "readonly",
+    "__dirname": "readonly"
+  }
+}

@@ -5,11 +5,11 @@ import { rgbToHex, wrapDataForWs } from './src/utils.js';
 import PixelGrid from './src/PixelGrid.js';
 
 const app = express();
-app.use(express.static('../client'));
+const PORT = 3000;
+// app.use(express.static('../client'));
 
-// HTTP server to upgrade non-secure requests to https
 const httpServer = http.createServer(app);
-httpServer.listen(3001, () => console.log("Listening on 3001"));
+httpServer.listen(PORT, () => console.log("Backend server listening on port " + PORT));
 
 
 // Create the object to store the main pixel grid state

@@ -21,6 +21,10 @@ class Controller {
         } : null;
     };
 
+    rgbToHex(r, g, b) {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    };
+
     getCell(x, y) {
         return this.cellRefs[x][y];
     }
@@ -94,7 +98,9 @@ class Controller {
                 cell.dataset.y = cellY;
 
                 if (existingCells?.[cellX]?.[cellY]) {
-                    this.applyCellColour(cell, existingCells[cellX][cellY]);
+                    const { r, g, b } = existingCells[cellX][cellY];
+                    const hexColour = this.rgbToHex(r, g, b);
+                    this.applyCellColour(cell, hexColour);
                 }
 
                 cell.addEventListener('click', () => this.cellClicked(cellX, cellY, cell));

@@ -2,6 +2,8 @@ import WSClient from './websocket-client.js';
 import Controller from './controller.js';
 const serverStatus = document.querySelector('.status');
 
+import './controller.css';
+
 const wsReceived = (msg) => {
     switch (msg.label) {
         case 'grid-state':
