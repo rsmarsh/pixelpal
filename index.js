@@ -2,72 +2,65 @@ import http from 'http';
 import express from 'express';
 import { WebSocketServer } from 'ws';
 import { rgbToHex, wrapDataForWs } from './src/utils.js';
-
-let pixelsChanged = 0;
-const pixelStates = {};
-
-// Updates the state of the pixel array after each change
-const updateState = (x, y, { r, g, b }) => {
-    if (!pixelStates[x]) {
-        pixelStates[x] = {}
-    }
-
-    const hex = rgbToHex(r, g, b);
-    pixelStates[x][y] = hex;
-};
-
-const triggerPixelChange = (x, y, { r, g, b }) => {
-    updateState(x, y, { r, g, b });
-    // setPixel(x, y, { r, g, b });
-    pixelsChanged += 1;
-}
+import PixelGrid from './src/PixelGrid.js';
 
 const server = express();
 server.use(express.static('public'));
-
-server.get('/pixel/clear', (req, res) => {
-    res.send('cleared');
-    pixelStates = {};
-});
-
-
 
 // HTTP server to upgrade non-secure requests to https
 const httpServer = http.createServer(server);
 httpServer.listen(3001, () => console.log("Listening on 3001"));
 
+
+// Create the object to store the main pixel grid state
+const pixelGrid = new PixelGrid('main', 16, 16);
+
+// Initialise the WebSocket server which handles all comms related to pixel grid changes
 const wss = new WebSocketServer({
     server: httpServer,
     path: '/ws'
-
 });
 
-
-
+// Received each time a new client connects from the browser
 wss.on('connection', (ws, res) => {
-    // send the current grid state to the connected client
-    ws.send(wrapDataForWs('grid-state', pixelStates));
-    ws.send(wrapDataForWs('paint-count', { count: pixelsChanged }));
 
+    // frist send the current grid state to the connected client
+    ws.send(wrapDataForWs('grid-state', pixelGrid.state));
+    ws.send(wrapDataForWs('paint-count', { count: pixelGrid.changeCount }));
+
+    // All messages after initial connection will fall under this 'message' event
     ws.on('message', (msg) => {
         const data = JSON.parse(msg);
 
+        // This label is used when a client is reporting a change to the grid
         if (data.label === 'cell-change') {
-            triggerPixelChange(data.payload.x, data.payload.y, { r: data.payload.r, g: data.payload.g, b: data.payload.b });
 
-            // wrap it back up and send to all connected clients
+            // Update our local grid state
+            pixelGrid.updateState(data.payload.x, data.payload.y, {
+                r: data.payload.r,
+                g: data.payload.g,
+                b: data.payload.b
+            });
+
+            // Now wrap the new change back up to sent to all other clients
             const hexColour = rgbToHex(data.payload.r, data.payload.g, data.payload.b);
-            const payload = { x: data.payload.x, y: data.payload.y, hex: hexColour };
+            const cellChangeData = wrapDataForWs('external-cell-change', {
+                x: data.payload.x,
+                y: data.payload.y,
+                hex: hexColour
+            });
 
+            // Rebroadcast the new cell update to all clients except the source, since they already know
             wss.clients.forEach(client => {
-                // don't rebroadcast back to source client
                 if (client !== ws) {
-                    client.send(wrapDataForWs('external-cell-change', payload));
+                    client.send(cellChangeData);
                 }
             });
 
-        } else {
-            console.log("unrecognised message label:", data.label);
+            return;
         }
+
+        // Reaching here means an unrecognised label was sent
+        console.log("unrecognised message label:", data.label);
     });
 });
