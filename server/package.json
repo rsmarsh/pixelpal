@@ -1,22 +1,22 @@
 {
   "name": "pixelpal",
   "version": "1.0.0",
-  "description": "Server to control lights via http requests on the Pimoroni UnicornHD RGB grid",
-  "main": "index.js",
+  "description": "Web-based collaborative pixel art drawing tool",
+  "main": "index.tsx",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rsmarsh/unicorn-rgb-server.git"
+    "url": "git+https://github.com/rsmarsh/pixelpal.git"
   },
   "author": "rsmarsh",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rsmarsh/unicorn-rgb-server/issues"
+    "url": "https:/github.com/rsmarsh/pixelpal/issues"
   },
-  "homepage": "https://github.com/rsmarsh/unicorn-rgb-server#readme",
+  "homepage": "https://github.com/rsmarsh/pixelpal#readme",
   "dependencies": {
     "express": "^4.17.2",
     "ws": "^8.4.2"
