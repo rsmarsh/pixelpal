@@ -18,11 +18,11 @@ class PixelGrid {
     // Generates the empty grid object with the provided dimensions
     generateInitialState = (width, height) => {
         const defaultColour = { r: 255, g: 255, b: 255 };
-        const gridState = {};
+        const gridState = [];
 
         // iterate across columns on the X axis
         for (let x = 0; x < width; x++) {
-            gridState[x] = {};
+            gridState[x] = [];
 
             // Then iterate through each row within a column
             for (let y = 0; y < height; y++) {

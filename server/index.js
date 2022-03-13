@@ -23,31 +23,48 @@ const wss = new WebSocketServer({
 
 // Received each time a new client connects from the browser
 wss.on('connection', (ws, res) => {
+    console.log("user connected");
 
-    // frist send the current grid state to the connected client
-    ws.send(wrapDataForWs('grid-state', pixelGrid.state));
-    ws.send(wrapDataForWs('paint-count', { count: pixelGrid.changeCount }));
 
     // All messages after initial connection will fall under this 'message' event
     ws.on('message', (msg) => {
         const data = JSON.parse(msg);
+        console.log("received message: " + data.label + ", payload: " + data.payload);
+
+        // When requested, return the latest grid state
+        if (data.label === 'req-grid-state') {
+            ws.send(
+                wrapDataForWs('grid-state', pixelGrid.state)
+            );
+
+            return;
+        }
+
+        // When requested, return the latest cell change count
+        if (data.label === 'req-paint-count') {
+            ws.send(
+                wrapDataForWs('paint-count', { count: pixelGrid.changeCount })
+            );
+
+            return;
+        }
 
         // This label is used when a client is reporting a change to the grid
         if (data.label === 'cell-change') {
 
             // Update our local grid state
             pixelGrid.updateState(data.payload.x, data.payload.y, {
-                r: data.payload.r,
-                g: data.payload.g,
-                b: data.payload.b
+                r: data.payload.color.r,
+                g: data.payload.color.g,
+                b: data.payload.color.b
             });
 
             // Now wrap the new change back up to sent to all other clients
-            const hexColour = rgbToHex(data.payload.r, data.payload.g, data.payload.b);
+            // const hexColour = rgbToHex(data.payload.color.r, data.payload.color.g, data.payload.color.b);
             const cellChangeData = wrapDataForWs('external-cell-change', {
                 x: data.payload.x,
                 y: data.payload.y,
-                hex: hexColour
+                color: data.payload.color
             });
 
             // Rebroadcast the new cell update to all clients except the source, since they already know
