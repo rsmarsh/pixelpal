@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import PixelCell from './PixelCell';
+import PixelCell from 'Components/PixelCell/PixelCell';
 import './PixelGrid.scss';
 
 type CellValue = { r: number; g: number; b: number };

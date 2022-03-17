@@ -1,9 +1,9 @@
 .pixel-cell {
+  display: block;
   width: 30px;
   height: 30px;
   text-align: center;
-  vertical-align: middle;
-  border: 1px solid #0000;
+  border: 1px solid #ddd;
 
   cursor: pointer;
 
