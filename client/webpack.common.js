@@ -13,6 +13,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss', '.css', '.svg'],
     alias: {
       Components: path.resolve(__dirname, 'src/components/'),
+      Hooks: path.resolve(__dirname, 'src/hooks/'),
       Assets: path.resolve(__dirname, 'src/assets/')
     }
   },
