@@ -10,6 +10,7 @@ interface PixelGridProps {
   id: string;
   width: number;
   height: number;
+  activeColour: { r: number; g: number; b: number };
   gridState: GridState;
   handleChange: (
     x: number,
@@ -31,14 +32,29 @@ const PixelGrid = (props: PixelGridProps) => {
     console.log('local grid updated');
   }, [props.gridState]);
 
+  function getCellColour(x: number, y: number): CellValue {
+    const colour = localGridState[x][y];
+    return colour;
+  }
+
   // When a single cell is changed, receive the change here and update gridState
-  function updateState(x: number, y: number, { r, g, b }: CellValue) {
+  function updateState(x: number, y: number, colour: CellValue) {
+    const current = getCellColour(x, y);
+
+    // If this cell is already in the requested colour, completely ignore this click event
+    if (
+      [current.r, current.g, current.b].join(',') ===
+      [colour.r, colour.g, colour.b].join(',')
+    ) {
+      return;
+    }
+
     const newGridState = [...localGridState];
-    newGridState[x][y] = { r, g, b };
+    newGridState[x][y] = colour;
     setLocalGridState(newGridState);
     setChangeCount(changeCount + 1);
 
-    props.handleChange(x, y, { r, g, b });
+    props.handleChange(x, y, colour);
   }
 
   function renderGrid(grid: GridState) {
@@ -48,7 +64,7 @@ const PixelGrid = (props: PixelGridProps) => {
           <PixelCell
             key={`${x}-${y}`}
             colour={colour}
-            handleClick={() => updateState(x, y, { r: 1, g: 2, b: 3 })}
+            handleClick={() => updateState(x, y, props.activeColour)}
           />
         ))}
       </div>

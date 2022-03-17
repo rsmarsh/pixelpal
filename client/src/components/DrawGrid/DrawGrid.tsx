@@ -3,9 +3,12 @@ import PixelGrid from 'Components/PixelGrid/PixelGrid';
 
 import useWebSocket from 'Hooks/useWebSocket';
 
+type ActiveColour = { r: number; g: number; b: number };
+
 const DrawGrid = () => {
   const [gridState, setGridState] = useState([]);
   const [paintCount, setPaintCount] = useState<number>(0);
+  const [activeColour, setActiveColour] = useState<ActiveColour>({ r: 0, g: 0, b: 0 });
   const gridStateRef = useRef(gridState);
 
   useEffect(() => {
@@ -79,7 +82,9 @@ const DrawGrid = () => {
         height={16}
         gridState={gridState}
         handleChange={sendGridUpdate}
+        activeColour={activeColour}
       />
+      Colour: <input type='color' />
     </div>
   );
 };
