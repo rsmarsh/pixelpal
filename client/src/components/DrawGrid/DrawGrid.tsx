@@ -1,14 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PixelGrid from 'Components/PixelGrid/PixelGrid';
+import ColourPicker from 'Components/ColourPicker/ColourPicker';
+import { randomColour } from 'Utils/colour';
+import './DrawGrid.scss';
 
 import useWebSocket from 'Hooks/useWebSocket';
 
-type ActiveColour = { r: number; g: number; b: number };
+type RGBColour = { r: number; g: number; b: number };
 
 const DrawGrid = () => {
+  const defaultColour = randomColour();
+
   const [gridState, setGridState] = useState([]);
   const [paintCount, setPaintCount] = useState<number>(0);
-  const [activeColour, setActiveColour] = useState<ActiveColour>({ r: 0, g: 0, b: 0 });
+  const [activeColour, setActiveColour] = useState<RGBColour>(defaultColour);
   const gridStateRef = useRef(gridState);
 
   useEffect(() => {
@@ -77,14 +82,16 @@ const DrawGrid = () => {
       <h2>Server status: {wsConnected ? 'connected' : 'disconnected'}</h2>
       <h3>Total cells painted: {paintCount}</h3>
       <PixelGrid
-        id='main'
+        id='Colour-Art'
         width={16}
         height={16}
         gridState={gridState}
         handleChange={sendGridUpdate}
         activeColour={activeColour}
       />
-      Colour: <input type='color' />
+      <div className='colour-picker-container'>
+        <ColourPicker initialColour={defaultColour} handleChange={setActiveColour} />
+      </div>
     </div>
   );
 };

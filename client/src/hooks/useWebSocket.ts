@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import WebSocketClient, { WSHandlers } from '../utils/websocket-client';
+import WebSocketClient, { WSHandlers } from 'Utils/websocket-client';
 
 type UseWebSocketReturn = [
   (label: string, message?: Record<string, unknown>) => void,

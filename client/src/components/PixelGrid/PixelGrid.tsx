@@ -64,7 +64,7 @@ const PixelGrid = (props: PixelGridProps) => {
           <PixelCell
             key={`${x}-${y}`}
             colour={colour}
-            handleClick={() => updateState(x, y, props.activeColour)}
+            handleClick={() => updateState(x, y, { ...props.activeColour })}
           />
         ))}
       </div>

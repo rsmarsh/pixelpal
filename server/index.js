@@ -1,7 +1,7 @@
 import http from 'http';
 import express from 'express';
 import { WebSocketServer } from 'ws';
-import { rgbToHex, wrapDataForWs } from './src/utils.js';
+import { wrapDataForWs } from './src/utils.js';
 import PixelGrid from './src/PixelGrid.js';
 
 const app = express();
