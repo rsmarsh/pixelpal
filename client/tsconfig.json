@@ -5,6 +5,7 @@
     "paths": {
       "Components*": ["src/components*"],
       "Hooks*": ["src/hooks*"],
+      "Utils*": ["src/utils*"],
       "Assets*": ["src/assets*"]
     },
     "noImplicitAny": true,
