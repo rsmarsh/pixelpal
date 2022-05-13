@@ -1,5 +1,10 @@
 $max-grid-size: 800px;
 
+body {
+  // prevent drag down refreshing pages when the grid is present
+  overscroll-behavior: contain;
+}
+
 .pixel-grid {
   display: flex;
   white-space: nowrap;
