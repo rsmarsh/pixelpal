@@ -4,18 +4,24 @@ import './PixelCell.scss';
 
 interface CellProps {
   colour: { r: number; g: number; b: number };
+  cellX: number;
+  cellY: number;
   handleClick: () => void;
 }
 
 const PixelCell = (props: CellProps) => {
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <button
       className='pixel-cell'
+      data-cell-x={props.cellX}
+      data-cell-y={props.cellY}
       style={{
         backgroundColor: `rgb(${props.colour.r}, ${props.colour.g}, ${props.colour.b})`
       }}
-      onClick={() => props.handleClick()}
+      onPointerDown={props.handleClick}
+      onPointerOver={(evt) => {
+        evt.pressure > 0 && props.handleClick();
+      }}
     ></button>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import PixelCell from 'Components/PixelCell/PixelCell';
+import { getElementFromCoords } from 'Utils/dom';
 import './PixelGrid.scss';
 
 type CellValue = { r: number; g: number; b: number };
@@ -29,7 +30,6 @@ const PixelGrid = (props: PixelGridProps) => {
   // update the local copy of the gridState each time a copy from the server is received
   useEffect(() => {
     setLocalGridState(props.gridState);
-    console.log('local grid updated');
   }, [props.gridState]);
 
   function getCellColour(x: number, y: number): CellValue {
@@ -77,8 +77,28 @@ const PixelGrid = (props: PixelGridProps) => {
     ));
   }
 
+  // onTouchMove only reports the cell which was initially pressed
+  // This function works out which cell is really being moved over
+  const getTouchMoveCell = (evt: React.TouchEvent) => {
+    const element = getElementFromCoords(
+      evt.changedTouches[0].clientX,
+      evt.changedTouches[0].clientY
+    );
+
+    return {
+      x: Number(element.dataset.cellX),
+      y: Number(element.dataset.cellY)
+    };
+  };
+
+  // This function exists to check which cell was dragged over when using a touch device
+  const checkCellTouchMove = (evt: React.TouchEvent) => {
+    const draggedOverCell = getTouchMoveCell(evt);
+    cellChange(draggedOverCell.x, draggedOverCell.y);
+  };
+
   return (
-    <div className='pixel-grid'>
+    <div className='pixel-grid' onTouchMove={(evt) => checkCellTouchMove(evt)}>
       {localGridState && renderGrid(localGridState)}
       {!localGridState && <div>Loading...</div>}
     </div>
