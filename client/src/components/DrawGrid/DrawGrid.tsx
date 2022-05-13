@@ -48,7 +48,7 @@ const DrawGrid = () => {
     }
   };
 
-  const [wsSend, wsConnected] = useWebSocket('localhost', {
+  const [wsSend, wsConnected] = useWebSocket(window.location.hostname, {
     message: receiveMessage,
     error: console.error
   });
