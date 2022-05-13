@@ -57,14 +57,20 @@ const PixelGrid = (props: PixelGridProps) => {
     props.handleChange(x, y, colour);
   }
 
+  function cellChange(x: number, y: number) {
+    updateState(x, y, { ...props.activeColour });
+  }
+
   function renderGrid(grid: GridState) {
     return grid.map((column, x) => (
       <div key={x} className='column'>
         {column.map((colour, y) => (
           <PixelCell
             key={`${x}-${y}`}
+            cellX={x}
+            cellY={y}
             colour={colour}
-            handleClick={() => updateState(x, y, { ...props.activeColour })}
+            handleClick={() => cellChange(x, y)}
           />
         ))}
       </div>
