@@ -44,7 +44,7 @@ const DrawGrid = () => {
       const newGridState = [...gridStateRef.current];
       newGridState[x][y] = { r: color.r, g: color.g, b: color.b };
       setGridState(newGridState);
-      incrementPaintCount(paintCount + 1);
+      incrementPaintCount();
     }
   };
 
@@ -53,8 +53,8 @@ const DrawGrid = () => {
     error: console.error
   });
 
-  const incrementPaintCount = (newCount: number) => {
-    setPaintCount(newCount);
+  const incrementPaintCount = () => {
+    setPaintCount((oldCount) => oldCount + 1);
   };
 
   const sendGridUpdate = (
@@ -63,7 +63,7 @@ const DrawGrid = () => {
     color: { r: number; g: number; b: number }
   ) => {
     wsSend('cell-change', { x, y, color });
-    incrementPaintCount(paintCount + 1);
+    incrementPaintCount();
   };
 
   useEffect(() => {
@@ -72,10 +72,6 @@ const DrawGrid = () => {
       wsSend('req-paint-count');
     }
   }, [wsConnected]);
-
-  useEffect(() => {
-    setPaintCount(paintCount + 1);
-  }, [gridState]);
 
   return (
     <div>
