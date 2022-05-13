@@ -1,7 +1,7 @@
 .pixel-cell {
   display: block;
-  width: 30px;
-  height: 30px;
+  width: 100%;
+  padding-top: 100%; //maintains aspect ratio
   text-align: center;
   border: 1px solid #ddd;
 
