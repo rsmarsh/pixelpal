@@ -23,6 +23,14 @@ const wss = new WebSocketServer({
     path: '/ws'
 });
 
+// Allows easy sending to all connected websocket clients, with the option to exclude the origin client
+const sendToAll = (data, clients, sourceClient, excludeSource) => {
+    clients.forEach(client => {
+        if (excludeSource && client === sourceClient) return;
+        client.send(data);
+    });
+};
+
 // Received each time a new client connects from the browser
 wss.on('connection', (ws, res) => {
     console.log("user connected");
@@ -71,11 +79,7 @@ wss.on('connection', (ws, res) => {
             });
 
             // Rebroadcast the new cell update to all clients except the source, since they already know
-            wss.clients.forEach(client => {
-                if (client !== ws) {
-                    client.send(cellChangeData);
-                }
-            });
+            sendToAll(cellChangeData, wss.clients, ws, true);
 
             return;
         }
