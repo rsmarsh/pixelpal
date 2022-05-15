@@ -4,6 +4,8 @@ import { WebSocketServer } from 'ws';
 import { wrapDataForWs } from './src/utils.js';
 import PixelGrid from './src/PixelGrid.js';
 
+const DEBUG_MODE = false;
+
 const app = express();
 const PORT = 3000;
 // app.use(express.static('../client'));
@@ -29,7 +31,8 @@ wss.on('connection', (ws, res) => {
     // All messages after initial connection will fall under this 'message' event
     ws.on('message', (msg) => {
         const data = JSON.parse(msg);
-        console.log("received message: " + data.label + ", payload: " + data.payload);
+
+        if (DEBUG_MODE) console.log("received message: " + data.label + ", payload: " + data.payload);
 
         // When requested, return the latest grid state
         if (data.label === 'req-grid-state') {
