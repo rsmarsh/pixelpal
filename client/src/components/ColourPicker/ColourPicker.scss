@@ -1,10 +1,43 @@
-.colour-picker {
+$picker-size: 7rem;
+
+.colour-picker-area {
+  display: flex;
+  flex-direction: row;
+
   input {
-    height: 7rem;
-    width: 7rem;
+    height: $picker-size;
+    width: $picker-size;
     border: none;
     border-radius: 50%;
 
     background-color: rgb(255, 255, 255, 0);
+  }
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.picker-tile {
+  cursor: pointer;
+  height: $picker-size/3;
+  width: calc(min(#{$picker-size}/ 3, 6vw));
+}
+
+.picker-list {
+  .picker-icon {
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0.5rem 0;
+    height: $picker-size/3;
+    width: $picker-size/3;
+
+    &.recents {
+      margin-left: auto;
+    }
   }
 }
