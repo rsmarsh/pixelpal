@@ -33,7 +33,9 @@ const sendToAll = (data, clients, sourceClient, excludeSource) => {
 
 // Received each time a new client connects from the browser
 wss.on('connection', (ws, res) => {
-    console.log("user connected");
+
+    // Inform all clients of the new user count
+    sendToAll(wrapDataForWs('user-count', { count: wss.clients.size }), wss.clients);
 
 
     // All messages after initial connection will fall under this 'message' event

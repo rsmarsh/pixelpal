@@ -11,6 +11,7 @@ type RGBColour = { r: number; g: number; b: number };
 const DrawGrid = () => {
   const defaultColour = randomColour();
 
+  const [userCount, setUserCount] = useState(0);
   const [gridState, setGridState] = useState([]);
   const [paintCount, setPaintCount] = useState<number>(0);
   const [activeColour, setActiveColour] = useState<RGBColour>(defaultColour);
@@ -22,6 +23,10 @@ const DrawGrid = () => {
 
   const receiveMessage = (label: string, data: any) => {
     console.log('ws message', label, data);
+
+    if (label === 'user-count') {
+      setUserCount(data.count as number);
+    }
 
     if (label === 'paint-count') {
       setPaintCount(data.count as number);
@@ -75,7 +80,8 @@ const DrawGrid = () => {
 
   return (
     <div>
-      <h2>Server status: {wsConnected ? 'connected' : 'disconnected'}</h2>
+      {!wsConnected && <h2>Connecting...</h2>}
+      <h3>Users Online: {userCount}</h3>
       <h3>Total cells painted: {paintCount}</h3>
       <PixelGrid
         id='Colour-Art'
