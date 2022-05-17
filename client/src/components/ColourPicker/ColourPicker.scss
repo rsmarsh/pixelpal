@@ -41,3 +41,21 @@ $picker-size: 7rem;
     }
   }
 }
+
+.eye-dropper {
+  text-align: center;
+  margin: 0.25rem 0;
+
+  button {
+    transition: box-shadow 0.2s;
+    width: $picker-size/2;
+    height: $picker-size/2;
+    box-shadow: 0;
+  }
+
+  &.mode-active {
+    button {
+      box-shadow: 0px 0px 9px 6px red;
+    }
+  }
+}

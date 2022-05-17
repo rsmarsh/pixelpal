@@ -16,8 +16,10 @@ interface PixelGridProps {
   handleChange: (
     x: number,
     y: number,
-    color: { r: number; g: number; b: number }
+    color: { r: number; g: number; b: number },
+    current: { r: number; g: number; b: number }
   ) => void;
+  eyeDropperActive: boolean;
 }
 
 const PixelGrid = (props: PixelGridProps) => {
@@ -41,6 +43,12 @@ const PixelGrid = (props: PixelGridProps) => {
   function updateState(x: number, y: number, colour: CellValue) {
     const current = getCellColour(x, y);
 
+    // no visual changes needed when using the eye dropper tool
+    if (props.eyeDropperActive) {
+      props.handleChange(x, y, colour, current);
+      return;
+    }
+
     // If this cell is already in the requested colour, completely ignore this click event
     if (
       [current.r, current.g, current.b].join(',') ===
@@ -54,7 +62,7 @@ const PixelGrid = (props: PixelGridProps) => {
     setLocalGridState(newGridState);
     setChangeCount(changeCount + 1);
 
-    props.handleChange(x, y, colour);
+    props.handleChange(x, y, colour, current);
   }
 
   function cellChange(x: number, y: number) {

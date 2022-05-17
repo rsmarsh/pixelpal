@@ -15,6 +15,8 @@ const DrawGrid = () => {
   const [gridState, setGridState] = useState([]);
   const [paintCount, setPaintCount] = useState<number>(0);
   const [activeColour, setActiveColour] = useState<RGBColour>(defaultColour);
+  // The eye dropper is active when the user is taking a used colour from the grid
+  const [eyeDropperActive, setEyeDropperActive] = useState(false);
   const gridStateRef = useRef(gridState);
 
   useEffect(() => {
@@ -62,12 +64,19 @@ const DrawGrid = () => {
     setPaintCount((oldCount) => oldCount + 1);
   };
 
-  const sendGridUpdate = (
+  const handleGridChange = (
     x: number,
     y: number,
-    color: { r: number; g: number; b: number }
+    newColour: { r: number; g: number; b: number },
+    currentColour: { r: number; g: number; b: number }
   ) => {
-    wsSend('cell-change', { x, y, color });
+    // this is a local only action, to change the active colour
+    if (eyeDropperActive) {
+      setActiveColour({ r: currentColour.r, g: currentColour.g, b: currentColour.b });
+      return;
+    }
+
+    wsSend('cell-change', { x, y, colour: newColour });
     incrementPaintCount();
   };
 
@@ -81,11 +90,17 @@ const DrawGrid = () => {
         width={16}
         height={16}
         gridState={gridState}
-        handleChange={sendGridUpdate}
+        handleChange={handleGridChange}
         activeColour={activeColour}
+        eyeDropperActive={eyeDropperActive}
       />
       <div className='colour-picker-container'>
-        <ColourPicker initialColour={defaultColour} handleChange={setActiveColour} />
+        <ColourPicker
+          activeColour={activeColour}
+          handleChange={setActiveColour}
+          eyeDropperActive={eyeDropperActive}
+          setEyeDropperActive={setEyeDropperActive}
+        />
       </div>
     </div>
   );
