@@ -71,13 +71,6 @@ const DrawGrid = () => {
     incrementPaintCount();
   };
 
-  useEffect(() => {
-    if (wsConnected) {
-      wsSend('req-grid-state');
-      wsSend('req-paint-count');
-    }
-  }, [wsConnected]);
-
   return (
     <div>
       {!wsConnected && <h2>Connecting...</h2>}

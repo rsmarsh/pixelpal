@@ -37,6 +37,15 @@ wss.on('connection', (ws, res) => {
     // Inform all clients of the new user count
     sendToAll(wrapDataForWs('user-count', { count: wss.clients.size }), wss.clients);
 
+    // Send the latest grid state to the new client
+    ws.send(
+        wrapDataForWs('grid-state', pixelGrid.state)
+    );
+
+    // send the total paint count to the new client
+    ws.send(
+        wrapDataForWs('paint-count', { count: pixelGrid.changeCount })
+    );
 
     // All messages after initial connection will fall under this 'message' event
     ws.on('message', (msg) => {
@@ -44,33 +53,26 @@ wss.on('connection', (ws, res) => {
 
         if (DEBUG_MODE) console.log("received message: " + data.label + ", payload: " + data.payload);
 
-        // When requested, return the latest grid state
-        if (data.label === 'req-grid-state') {
-            ws.send(
-                wrapDataForWs('grid-state', pixelGrid.state)
-            );
-
-            return;
-        }
-
-        // When requested, return the latest cell change count
-        if (data.label === 'req-paint-count') {
-            ws.send(
-                wrapDataForWs('paint-count', { count: pixelGrid.changeCount })
-            );
-
-            return;
-        }
-
         // This label is used when a client is reporting a change to the grid
         if (data.label === 'cell-change') {
+            if (!data.payload.colour) {
+                console.log("missing colour sent: " + data.payload);
+                return;
+            }
+
+            const { r, g, b } = data.payload.colour;
+
+            if (r === undefined || g === undefined || b === undefined) {
+                console.log("invalid colour sent: " + data.payload.colour);
+                return;
+            }
+
+            if (data.payload.x === undefined || data.payload.y === undefined) {
+                console.log("invalid coordinate sent: " + data.payload);
+            }
 
             // Update our local grid state
-            pixelGrid.updateState(data.payload.x, data.payload.y, {
-                r: data.payload.color.r,
-                g: data.payload.color.g,
-                b: data.payload.color.b
-            });
+            pixelGrid.updateState(data.payload.x, data.payload.y, { r, g, b });
 
             // Now wrap the new change back up to sent to all other clients
             // const hexColour = rgbToHex(data.payload.color.r, data.payload.color.g, data.payload.color.b);
@@ -87,6 +89,6 @@ wss.on('connection', (ws, res) => {
         }
 
         // Reaching here means an unrecognised label was sent
-        console.log("unrecognised message label:", data.label);
+        console.log("unrecognised message label: ", data.label);
     });
 });
