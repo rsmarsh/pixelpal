@@ -11,7 +11,7 @@ type RGBColour = { r: number; g: number; b: number };
 const DrawGrid = () => {
   const defaultColour = randomColour();
 
-  const [userCount, setUserCount] = useState(0);
+  const [userCount, setUserCount] = useState(1);
   const [gridState, setGridState] = useState([]);
   const [paintCount, setPaintCount] = useState<number>(0);
   const [activeColour, setActiveColour] = useState<RGBColour>(defaultColour);
