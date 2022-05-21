@@ -1,14 +1,10 @@
-import http from 'http';
-import express from 'express';
+import startHTTPServer from './src/http-server.js';
 import { WebSocketServer } from 'ws';
 import PixelGrid from './src/PixelGrid.js';
 import { initialisePixelComms } from './src/pixelgrid-comms.js';
 
-const app = express();
-const PORT = 3000;
-
-const httpServer = http.createServer(app);
-httpServer.listen(PORT, () => console.log("Backend server listening on port " + PORT));
+// for production only, the nodejs app takes over handling of the page delivery over webpack-dev-server
+const { httpServer, httpsServer } = startHTTPServer();
 
 // Create the object to store the main pixel grid state
 const pixelGrid = new PixelGrid('main', 16, 16);
