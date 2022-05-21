@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/rsmarsh/pixelpal#readme",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "express": "^4.17.2",
     "ws": "^8.4.2"
   }

@@ -1,3 +1,4 @@
+import './src/env.js';
 import startHTTPServer from './src/http-server.js';
 import { WebSocketServer } from 'ws';
 import PixelGrid from './src/PixelGrid.js';
