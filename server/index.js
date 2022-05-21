@@ -12,7 +12,7 @@ const pixelGrid = new PixelGrid('main', 16, 16);
 
 // Initialise the WebSocket server to receive all connecting clients
 const wss = new WebSocketServer({
-    server: httpServer,
+    server: httpsServer,
     path: '/ws'
 });
 
