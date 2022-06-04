@@ -16,7 +16,7 @@ interface PixelGridProps {
   handleChange: (
     x: number,
     y: number,
-    color: { r: number; g: number; b: number },
+    colour: { r: number; g: number; b: number },
     current: { r: number; g: number; b: number }
   ) => void;
   eyeDropperActive: boolean;

@@ -57,11 +57,10 @@ class PixelGridComms {
                     this.pixelGrid.updateState(data.payload.x, data.payload.y, { r, g, b });
 
                     // Now wrap the new change back up to sent to all other clients
-                    // const hexColour = rgbToHex(data.payload.color.r, data.payload.color.g, data.payload.color.b);
                     const cellChangeData = wrapDataForWs('external-cell-change', {
                         x: data.payload.x,
                         y: data.payload.y,
-                        color: data.payload.color
+                        colour: data.payload.colour
                     });
 
                     // Rebroadcast the new cell update to all clients except the source, since they already know

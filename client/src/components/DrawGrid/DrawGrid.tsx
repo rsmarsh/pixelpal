@@ -39,17 +39,17 @@ const DrawGrid = () => {
     }
 
     if (label === 'external-cell-change') {
-      const { x, y, color } = data as {
+      const { x, y, colour } = data as {
         x: number;
         y: number;
-        color: {
+        colour: {
           r: number;
           g: number;
           b: number;
         };
       };
       const newGridState = [...gridStateRef.current];
-      newGridState[x][y] = { r: color.r, g: color.g, b: color.b };
+      newGridState[x][y] = { r: colour.r, g: colour.g, b: colour.b };
       setGridState(newGridState);
       incrementPaintCount();
     }
