@@ -26,7 +26,7 @@ class WSClient {
     this.messageHandler = handlers.message;
 
     const socketProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const echoSocketUrl = socketProtocol + '//' + url + ':3000/ws';
+    const echoSocketUrl = socketProtocol + '//' + url + '/ws';
 
     this.wsConnection = this.#createConnection(echoSocketUrl);
     this.wsConnection.onopen = () => handlers?.connected?.();
