@@ -55,7 +55,13 @@ const DrawGrid = () => {
     }
   };
 
-  const [wsSend, wsConnected] = useWebSocket(window.location.hostname, {
+  // check for local dev mode 🤷‍♂️
+  const WSUrl =
+    process.env.NODE_ENV === 'development'
+      ? `${window.location.hostname}:3001`
+      : window.location.hostname;
+
+  const [wsSend, wsConnected] = useWebSocket(WSUrl, {
     message: receiveMessage,
     error: console.error
   });

@@ -21,8 +21,26 @@ if (!Array.isArray(urlList)) {
     throw Error('At least one domain must be specified in the .env file as an array. See .env.example');
 }
 
+function createDevServer() {
+    const app = express();
+    const httpServer = http.createServer(app);
+    httpServer.listen(HTTP_PORT, () => console.log("Backend dev server listening on port " + HTTP_PORT));
+    return httpServer;
+}
+
 // Creates both an HTTP and HTTPS server, with autoupgrading enabled
-export default function startHTTPServer() {
+export default function startHTTPServer(isDevMode) {
+
+    // set up a simple wss server if running locally, with no https or certs required
+    if (isDevMode) {
+        const devServer = createDevServer();
+
+        return {
+            httpServer: devServer,
+            primaryServer: devServer
+        }
+    }
+
     const httpsServer = https.createServer(app);
 
     // don't modify the original URL list
@@ -54,6 +72,10 @@ export default function startHTTPServer() {
         res.end();
     });
 
-    return { httpServer, httpsServer };
+    return {
+        httpServer,
+        httpsServer,
+        primaryServer: httpsServer
+    };
 };
 
