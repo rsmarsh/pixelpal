@@ -23,6 +23,11 @@ const DrawGrid = () => {
     gridStateRef.current = gridState;
   }, [gridState]);
 
+  useEffect(() => {
+    // Switch off the eye dropper tool as soon as a new colour is selected. This seems wrong but is the most common pattern and the expected behaviour
+    setEyeDropperActive(false);
+  }, [activeColour]);
+
   const receiveMessage = (label: string, data: any) => {
     console.log('ws message', label, data);
 
