@@ -94,8 +94,10 @@ const DrawGrid = () => {
   return (
     <div>
       {!wsConnected && <h2>Connecting...</h2>}
-      <h3>Users Online: {userCount}</h3>
-      <h3>Total cells painted: {paintCount}</h3>
+      <p className='grid-stats'>
+        {userCount} {userCount === 1 ? 'User' : 'Users'} Online. {paintCount} cells
+        painted
+      </p>
       <PixelGrid
         id='Colour-Art'
         width={16}
