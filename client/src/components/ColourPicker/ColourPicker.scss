@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 $picker-size: 7rem;
 
 .colour-picker-area {
@@ -21,7 +23,7 @@ $picker-size: 7rem;
 
 .picker-tile {
   cursor: pointer;
-  height: $picker-size/3;
+  height: math.div($picker-size, 3);
   width: calc(min(#{$picker-size}/ 3, 6vw));
 }
 
@@ -33,8 +35,8 @@ $picker-size: 7rem;
     justify-content: center;
 
     margin: 0.5rem 0;
-    height: $picker-size/3;
-    width: $picker-size/3;
+    height: math.div($picker-size, 3);
+    width: math.div($picker-size, 3);
 
     &.recents {
       margin-left: auto;
@@ -48,8 +50,8 @@ $picker-size: 7rem;
 
   button {
     transition: box-shadow 0.2s;
-    width: $picker-size/2;
-    height: $picker-size/2;
+    width: math.div($picker-size, 2);
+    height: math.div($picker-size, 2);
     box-shadow: 0;
   }
 
